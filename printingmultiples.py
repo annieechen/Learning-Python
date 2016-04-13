@@ -9,10 +9,11 @@ second = [ 7, 5, 9, 2, 4, 6, 1, 8, 0, 3]
 print "["
 for number in first:
 	for multiplier in second:
-		print '	   {'
-		print '		"Question" : "What is %d X %d?",' % (number, multiplier)
-		print ' 	"Spoken Question" : "What is %s times %s?", ' % (num2words(number), num2words(multiplier))
-		print '		"Answer" : %d,' %(number * multiplier)
+		print ' {'
+		print '	"Question" : "What is %d X %d?",' % (number, multiplier)
+		print '	"Spoken Question" : "What is %s times %s?", ' % (num2words(number), num2words(multiplier))
+		print '	"Answer" : %d,' %(number * multiplier)
+		print '	"Spoken Answer" : "The correct answer is %s."' %(num2words(number * multiplier))
+		print ' },'
 		print ""
-		print '     }'
 print "]"

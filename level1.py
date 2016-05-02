@@ -6,7 +6,7 @@ import random
 first = [5, 8, 2, 9, 1, 3, 4, 0, 6, 8, 7]
 second = [ 7, 5, 9, 2, 4, 6, 1, 8, 0, 3]
 
-#initialize json
+# for type multiplication
 print "["
 for number in first:
 	for multiplier in second:
@@ -15,10 +15,27 @@ for number in first:
 		print '	"Question" : "What is %d + %d X %d?",' % (third, number, multiplier)
 		print '	"Spoken Question" : "What is %s plus %s times %s?", ' % (num2words(third), num2words(number), num2words(multiplier))
 		print '	"Answer" : %d,' % (third + (number * multiplier))
-		print '	"Spoken Answer" : "The correct answer is %s."' %(third + (number * multiplier))
-		print ' "Difficulty Level" : 1,'
+		print '	"Spoken Answer" : "The correct answer is %s.",' %(num2words(third + (number * multiplier)))
+		print '	"Difficulty Level" : 1,'
+		print '	"Problem Type:" "Multiplication", '
 		print '	"Max Time" : 60,'
-		print ' "Most Common Mistake" : %d' % ((third + number ) * multiplier)
+		print '	"Most Common Mistake" : %d' % ((third + number ) * multiplier)
+		print ' },'
+		print ""
+
+# for type parentheses
+for number in second:
+	for multiplier in first:
+		third  = random.randint(0,9)
+		print ' {'
+		print '	"Question" : "What is (%d + %d) X %d?",' % (third, number, multiplier)
+		print '	"Spoken Question" : "What is (%s plus %s) times %s?", ' % (num2words(third), num2words(number), num2words(multiplier))
+		print '	"Answer" : %d,' % ((third + number) * multiplier)
+		print '	"Spoken Answer" : "The correct answer is %s.",' %(num2words((third + number) * multiplier))
+		print '	"Difficulty Level" : 1,'
+		print '	"Problem Type:" "Parentheses", '
+		print '	"Max Time" : 60,'
+		print '	"Most Common Mistake" : %d' % (third + number  * multiplier)
 		print ' },'
 		print ""
 print "]"

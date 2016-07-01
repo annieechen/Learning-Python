@@ -1,0 +1,33 @@
+#!/bin/python
+
+import sys
+import math
+
+length,limit = raw_input().strip().split(' ')
+length,limit = [int(length),int(limit)]
+n = raw_input().strip()
+number = list(n)
+needswapping = {}
+maxpalindrome = 0
+#count the number of swaps needed
+swapsneeded = 0
+half = int(math.floor(length/2))
+for i in range(half):
+    if(number[i] != number[length - i - 1]):
+        swapsneeded += 1 
+        needswapping[i] = length - i - 1
+if swapsneeded > limit:
+    print -1
+    sys.exit()
+# for swaps, you want to change all the pairs up to limit, and only swap the last one
+for first in needswapping:
+    number[int(first)] = 9
+    number[needswapping[first]] = 9
+# else, want to change all except the last number in swapsneeded to 9
+    if limit % 2 == 1:
+        # swap the last one back
+        maxswap = max(needswapping.keys())
+        final = max(number[maxswap], number[needswapping[maxswap]])
+        number[int(maxswap)] = final
+        number[needswapping[maxswap]] = final
+print ''.join(map(str, number))

@@ -23,6 +23,9 @@ path = raw_input("directory name?")
 fullpath = os.path.join(os.getcwd(),path)
 directory = os.listdir(fullpath)
 
+# create a new folder for the sequences
+folderpath = os.path.join(fullpath, "sequences")
+os.makedirs(folderpath)
 #open each file
 for filename in  directory:
     # make sure it's a file we want, not a hidden or a directory itself
@@ -40,11 +43,10 @@ for filename in  directory:
     newfilename = re.sub('\.txt$', '_seq.txt', filename)
     print newfilename + "that was new file"
     # write our sequences to a regular file
-    output = open(os.path.join(fullpath, newfilename), 'w') 
+    output = open(os.path.join(folderpath, newfilename), 'w') 
 
     curr_list = []
     for row in csv_file:
-        print row[TYPE]
         # if it's a value we care about
         if row[TYPE] in mapping:
             if row[TYPE] == "CORRECT" or row[TYPE] == "LAST INCORRECT":
@@ -56,6 +58,7 @@ for filename in  directory:
                 output.write(s + '\n')
                 curr_list[:] = []
             else:
+                # just add the type to list
                 curr_list.append(mapping[row[TYPE]])
                 curr_list.append(SPLIT)
         elif row[TYPE] == "END":

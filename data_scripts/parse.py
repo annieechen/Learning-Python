@@ -30,7 +30,6 @@ os.makedirs(folderpath)
 for filename in  directory:
     # make sure it's a file we want, not a hidden or a directory itself
     path = os.path.join(fullpath, filename)
-    print path
     if os.path.isdir(path) or filename.startswith('.'):
         print "skipping" + filename
         continue
@@ -41,7 +40,6 @@ for filename in  directory:
 
     # create filename to write it to
     newfilename = re.sub('\.txt$', '_seq.txt', filename)
-    print newfilename + "that was new file"
     # write our sequences to a regular file
     output = open(os.path.join(folderpath, newfilename), 'w') 
 

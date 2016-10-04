@@ -2,9 +2,19 @@ import csv
 import os
 import re
 #macros
-TYPE = 6
-SPLIT = -1
-TERMINATE = -2
+TYPE = 5
+SPLIT = "-1"
+TERMINATE = "-2"
+
+# create a dict to refer to numbers from keys
+mapping = {
+    'HINT 1': "1",
+    'HINT 2': "2",
+    'HINT 3': "3",
+    'INCORRECT': "4",
+    'CORRECT': "5",
+    'LAST INCORRECT': "6",
+}
 
 # get list of files to open
 # to use, enter relative path to folder to open
@@ -17,44 +27,38 @@ directory = os.listdir(fullpath)
 for filename in  directory:
     # make sure it's a file we want, not a hidden or a directory itself
     path = os.path.join(fullpath, filename)
+    print path
     if os.path.isdir(path) or filename.startswith('.'):
+        print "skipping" + filename
         continue
 
-    # now, open file
+    # now, open to read file
     file = open(path)
     csv_file = csv.reader(file)
 
-    #loop through all rows, even though some don't have the module we want
-    dict = {}
-
-    for row in csv_file:
-        #if the row is a title row, with unit module and asg:
-        if row[0]:
-            # create a string that's combining unit number with module number with name 
-            name = "%s-%s: %s" % (row[0], row[1], row[3])
-            # if is an assignment
-            if row[2]:
-                name = "%s-%sA: %s" % (row[0], row[1], row[3])
-        #make sure whole row isn't just spacing
-        if row[4]:
-            #make sure row is a valid learning objectie number
-            if row[4][3].isdigit(): 
-                LO = row[4][3:9]
-                #if this learning objective has already been added
-                if LO in dict:
-                    #append current module to that last
-                    dict[LO].append(name)
-                #otherwise, add this learning objective to the dictionary
-                else:
-                    dict[LO] = [name]
-    
     # create filename to write it to
-    newfilename = 
-    #now that everything is mapped backwards, write it to a CSV!
-    with open('parseddata.csv', 'w') as mycsvfile:
-        #not sure why I need so many variables here, based it off an example
-        writer = csv.writer(mycsvfile)
-        for key in sorted(dict):
-            writer.writerow([key," "])
-            for module in dict[key]:
-                writer.writerow([" ",module])
+    newfilename = re.sub('\.txt$', '_seq.txt', filename)
+    print newfilename + "that was new file"
+    # write our sequences to a regular file
+    output = open(os.path.join(fullpath, newfilename), 'w') 
+
+    curr_list = []
+    for row in csv_file:
+        print row[TYPE]
+        # if it's a value we care about
+        if row[TYPE] in mapping:
+            if row[TYPE] == "CORRECT" or row[TYPE] == "LAST INCORRECT":
+                # last in this line, write to file and clear
+                curr_list.append(mapping[row[TYPE]])
+                curr_list.append(SPLIT)
+                curr_list.append(TERMINATE)
+                s = ' '.join(curr_list)
+                output.write(s + '\n')
+                curr_list[:] = []
+            else:
+                curr_list.append(mapping[row[TYPE]])
+                curr_list.append(SPLIT)
+        elif row[TYPE] == "END":
+            break
+    file.close()
+    output.close()

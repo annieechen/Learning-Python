@@ -3,8 +3,10 @@ import os
 import re
 #macros
 TYPE = 5
+OTHER_INFO = 6
 SPLIT = "-1"
 TERMINATE = "-2"
+AUTOHINT = "9"
 
 # create a dict to refer to numbers from keys
 mapping = {
@@ -14,6 +16,7 @@ mapping = {
     'INCORRECT': "4",
     'CORRECT': "5",
     'LAST INCORRECT': "6",
+    'DENIED HINT': "8"
 }
 
 # get list of files to open
@@ -56,6 +59,12 @@ for filename in  directory:
                 output.write(s + '\n')
                 curr_list[:] = []
             else:
+                # if it's a hint, check to see if auto
+                if "HINT" in row[TYPE]:
+                    if row[OTHER_INFO] == "automatic":
+                        curr_list.append(AUTOHINT)
+                        curr_list.append(SPLIT)
+                        continue
                 # just add the type to list
                 curr_list.append(mapping[row[TYPE]])
                 curr_list.append(SPLIT)

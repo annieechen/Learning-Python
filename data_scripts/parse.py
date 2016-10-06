@@ -1,6 +1,9 @@
 import csv
 import os
 import re
+# usage
+OUTPUTFOLDER = "sequences"
+
 #macros
 TYPE = 5
 OTHER_INFO = 6
@@ -22,12 +25,12 @@ mapping = {
 # get list of files to open
 # to use, enter relative path to folder to open
 
-path = raw_input("directory name?")
+path = raw_input("directory name (relative path from current directory): ")
 fullpath = os.path.join(os.getcwd(),path)
 directory = os.listdir(fullpath)
 
 # create a new folder for the sequences
-folderpath = os.path.join(fullpath, "sequences")
+folderpath = os.path.join(fullpath, OUTPUTFOLDER)
 os.makedirs(folderpath)
 #open each file
 for filename in  directory:
